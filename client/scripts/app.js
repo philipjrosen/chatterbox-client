@@ -12,8 +12,12 @@ $.ajax({
 var displayMessages = function(data) {
   var $ul = $('.chatList');
   _.each(data.results, function(message){
-    var $li = $('<li></li>');
-    $li.text(message.username);
+    var $li = $('<li class="post"></li>');
+    var $user = $('<p class=user></p>');
+    var $message = $('<p class="message"></p>');
+    $user.text(message.username);
+    $message.text(message.text);
+    $li.append($user, $message);
     $ul.append($li);
   });
 }
