@@ -1,8 +1,9 @@
-
 var getChats = function(successCallback) {
+  var reverseOrder = encodeURIComponent('order=-score');
   $.ajax({
     url: 'https://api.parse.com/1/classes/chatterbox',
     type: 'GET',
+    data: reverseOrder,
     success: function (data) {
       successCallback(data.results);
     },
