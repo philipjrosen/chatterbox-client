@@ -37,7 +37,7 @@ window.app = {
 
   displayMessages: function(messages) {
     var arePosts = !!$('.post').length;
-    var $ul = $('.chatList');
+    var $ul = $('#chats');
     _.each(messages, function(message){
       var $li = $('<li class="post"></li>');
       var $user = $('<p class=user></p>');
@@ -49,6 +49,10 @@ window.app = {
       $li.append($user, $message, $createdAt);
       arePosts ? $ul.prepend($li) : $ul.append($li);
     });
+  },
+
+  clearMessages: function() {
+    $("#chats").empty();
   }
 };
 
