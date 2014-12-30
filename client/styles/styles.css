@@ -64,6 +64,19 @@ form input[type=text] {
     margin-bottom: 5px;
     background-color: #eee;
 }
+.chats {
+    line-height: .5;
+}
+
+.post {
+    list-style-type: none;
+    border: 1px solid black;
+}
+
+.post .user {
+    color: blue;
+    font-weight: bold;
+}
 
 .chat .username {
     font-weight: 800;
