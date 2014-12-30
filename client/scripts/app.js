@@ -2,8 +2,19 @@ window.app = {
   init: function(){
 
   },
-  send: function(){
-
+  send: function(message) {
+    $.ajax({
+      url: 'https://api.parse.com/1/classes/chatterbox',
+      type: 'POST',
+      data: JSON.stringify(message),
+      contentType: 'application/json',
+      success: function (data) {
+        console.log("post:", data);
+      },
+      error: function (data) {
+        console.error('chatterbox: Failed to send message');
+      }
+    });
   }
 };
 
@@ -11,12 +22,6 @@ window.app = {
 var getChats = function(successCallback) {
   var lastPostTime = $('li span').first().text() || '2014-12-01T00:00:00';
   console.log(lastPostTime);
-  // if ($('.post').length) {
-  //   lastPostTime = '&where={"createdAt":{"$gte":' + '"' + $lastPostTime + '"' + '}}';
-  //   console.log(lastPostTime);
-  // }
-
-  // url: 'https://api.parse.com/1/classes/chatterbox' + '?order=-createdAt'+ lastPostTime,
   var url = 'https://api.parse.com/1/classes/chatterbox?order=-createdAt&where={"createdAt":{"$gt":"'+lastPostTime+'"}}';
   console.log(url);
 
