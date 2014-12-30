@@ -1,10 +1,20 @@
 var getChats = function(successCallback) {
-  var reverseOrder = encodeURIComponent('order=-score');
+  var lastPostTime = $('li span').first().text() || '2014-12-01T00:00:00';
+  console.log(lastPostTime);
+  // if ($('.post').length) {
+  //   lastPostTime = '&where={"createdAt":{"$gte":' + '"' + $lastPostTime + '"' + '}}';
+  //   console.log(lastPostTime);
+  // }
+
+  // url: 'https://api.parse.com/1/classes/chatterbox' + '?order=-createdAt'+ lastPostTime,
+  var url = 'https://api.parse.com/1/classes/chatterbox?order=-createdAt&where={"createdAt":{"$gt":"'+lastPostTime+'"}}';
+  console.log(url);
+
   $.ajax({
-    url: 'https://api.parse.com/1/classes/chatterbox',
+    url: url,
     type: 'GET',
-    data: reverseOrder,
     success: function (data) {
+      console.log('data results', data.results);
       successCallback(data.results);
     },
     error: function (data) {
@@ -34,27 +44,20 @@ var displayMessages = function(messages) {
     var $li = $('<li class="post"></li>');
     var $user = $('<p class=user></p>');
     var $message = $('<p class="message"></p>');
+    var $createdAt = $('<span class="createdAt"></span>');
     $user.text(message.username);
     $message.text(message.text);
-    $li.append($user, $message);
+    $createdAt.text(message.createdAt);
+    $li.append($user, $message, $createdAt);
     $ul.append($li);
   });
-}
-
-var displayNewMessages = function(messages) {
-  var $length = $('li').length;
-  var results = messages.slice($length);
-  if ( !results.length ) {
-    console.log('displayNewMessages')
-  }
-  displayMessages(results);
 };
 
 $(document).ready(function(){
   getChats(displayMessages);
 
   $('button').on('click', function(){
-    getChats(displayNewMessages);
+    getChats(displayMessages);
   });
 
   $('.postMessage').on('submit', function(e) {
