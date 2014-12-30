@@ -1,3 +1,7 @@
+// 1) add ability to add rooms and filter messages by room
+// 2) implement URL escaping
+// 3) implement ability to add friends
+
 window.app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
 
@@ -60,8 +64,15 @@ window.app = {
   },
 
   addRoom: function(roomName) {
+    console.log(roomName);
     var $newRoom = $('<div></div>').addClass('roomName');
     $('#roomSelect').append($newRoom);
+    // empty current room
+    app.clearMessages();
+    // fetch messages from current room
+    // app.fetch
+    // filter messages from current room
+    // update the DOM with those messages
   }
 };
 
@@ -70,6 +81,13 @@ $(document).ready(function(){
 
   $('button').on('click', function(){
     app.fetch();
+  });
+
+  $('.addRoom').on('submit', function() {
+    var $room = $(this).find("input[name='room']");
+    var roomName = $room.val();
+    $room.val('');
+    app.addRoom(roomName);
   });
 
   $('.postMessage').on('submit', function(e) {
