@@ -1,7 +1,10 @@
 window.app = {
+  server: 'https://api.parse.com/1/classes/chatterbox',
+
   init: function(){
 
   },
+
   send: function(message) {
     $.ajax({
       url: 'https://api.parse.com/1/classes/chatterbox',
@@ -15,21 +18,50 @@ window.app = {
         console.error('chatterbox: Failed to send message');
       }
     });
+  },
+
+  fetch: function() {
+    var lastPostTime = $('li span').first().text() || '2014-12-01T00:00:00';
+    var url = 'https://api.parse.com/1/classes/chatterbox?order=-createdAt&where={"createdAt":{"$gt":"'+lastPostTime+'"}}';
+    // note: need to account for query options in ajax call
+    $.ajax({
+      url: app.server,
+      type: 'GET',
+      success: function (data) {
+        app.displayMessages(data.results);
+      },
+      error: function (data) {
+        console.error('chatterbox: Failed to send message');
+      }
+    });
+  },
+
+  displayMessages: function(messages) {
+    var arePosts = !!$('.post').length;
+    var $ul = $('.chatList');
+    _.each(messages, function(message){
+      var $li = $('<li class="post"></li>');
+      var $user = $('<p class=user></p>');
+      var $message = $('<p class="message"></p>');
+      var $createdAt = $('<span class="createdAt"></span>');
+      $user.text(message.username);
+      $message.text(message.text);
+      $createdAt.text(message.createdAt);
+      $li.append($user, $message, $createdAt);
+      arePosts ? $ul.prepend($li) : $ul.append($li);
+    });
   }
 };
 
 
 var getChats = function(successCallback) {
   var lastPostTime = $('li span').first().text() || '2014-12-01T00:00:00';
-  console.log(lastPostTime);
   var url = 'https://api.parse.com/1/classes/chatterbox?order=-createdAt&where={"createdAt":{"$gt":"'+lastPostTime+'"}}';
-  console.log(url);
 
   $.ajax({
     url: url,
     type: 'GET',
     success: function (data) {
-      console.log('data results', data.results);
       successCallback(data.results);
     },
     error: function (data) {
@@ -40,17 +72,17 @@ var getChats = function(successCallback) {
 
 var postChat = function(message) {
   $.ajax({
-  url: 'https://api.parse.com/1/classes/chatterbox',
-  type: 'POST',
-  data: JSON.stringify(message),
-  contentType: 'application/json',
-  success: function (data) {
-    console.log("post:", data);
-  },
-  error: function (data) {
-    console.error('chatterbox: Failed to send message');
-  }
-});
+    url: 'https://api.parse.com/1/classes/chatterbox',
+    type: 'POST',
+    data: JSON.stringify(message),
+    contentType: 'application/json',
+    success: function (data) {
+      console.log("post:", data);
+    },
+    error: function (data) {
+      console.error('chatterbox: Failed to send message');
+    }
+  });
 };
 
 var displayMessages = function(messages) {
