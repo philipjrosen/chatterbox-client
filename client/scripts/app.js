@@ -12,6 +12,21 @@ var getChats = function(successCallback) {
   });
 }
 
+var postChat = function(message) {
+  $.ajax({
+  url: 'https://api.parse.com/1/classes/chatterbox',
+  type: 'POST',
+  data: JSON.stringify(message),
+  contentType: 'application/json',
+  success: function (data) {
+    console.log("post:", data);
+  },
+  error: function (data) {
+    console.error('chatterbox: Failed to send message');
+  }
+});
+};
+
 var displayMessages = function(messages) {
   var $ul = $('.chatList');
   _.each(messages, function(message){
@@ -41,5 +56,16 @@ $(document).ready(function(){
     getChats(displayNewMessages);
   });
 
-});
+  $('.postMessage').on('submit', function(e) {
+    e.preventDefault();
+    var message = {};
+    var $text = $(this).find("input[name='message']");
+    var $username = $(this).find("input[name='username']");
+    message['text'] = $text.val();
+    message['username'] = $username.val();
+    $text.val('');
+    $username.val('');
+    postChat(message);
+  });
 
+});
