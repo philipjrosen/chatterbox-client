@@ -1,4 +1,11 @@
-window.app = {};
+window.app = {
+  init: function(){
+
+  },
+  send: function(){
+
+  }
+};
 
 
 var getChats = function(successCallback) {
