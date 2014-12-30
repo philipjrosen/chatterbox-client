@@ -39,6 +39,8 @@ var postChat = function(message) {
 };
 
 var displayMessages = function(messages) {
+  var arePosts = !!$('.post').length;
+  console.log(arePosts);
   var $ul = $('.chatList');
   _.each(messages, function(message){
     var $li = $('<li class="post"></li>');
@@ -49,7 +51,7 @@ var displayMessages = function(messages) {
     $message.text(message.text);
     $createdAt.text(message.createdAt);
     $li.append($user, $message, $createdAt);
-    $ul.append($li);
+    arePosts ? $ul.prepend($li) : $ul.append($li);
   });
 };
 
@@ -67,6 +69,8 @@ $(document).ready(function(){
     var $username = $(this).find("input[name='username']");
     message['text'] = $text.val();
     message['username'] = $username.val();
+    // note, this is hardcoded and shouldn't be
+    message['roomname'] = 'defaultRoomName';
     $text.val('');
     $username.val('');
     postChat(message);
