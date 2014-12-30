@@ -30,29 +30,38 @@ window.app = {
         app.displayMessages(data.results);
       },
       error: function (data) {
-        console.error('chatterbox: Failed to send message');
+        console.error('chatterbox: Failed to fetch message');
       }
     });
   },
 
   displayMessages: function(messages) {
-    var arePosts = !!$('.post').length;
-    var $ul = $('#chats');
     _.each(messages, function(message){
-      var $li = $('<li class="post"></li>');
-      var $user = $('<p class=user></p>');
-      var $message = $('<p class="message"></p>');
-      var $createdAt = $('<span class="createdAt"></span>');
-      $user.text(message.username);
-      $message.text(message.text);
-      $createdAt.text(message.createdAt);
-      $li.append($user, $message, $createdAt);
-      arePosts ? $ul.prepend($li) : $ul.append($li);
+      app.addMessage(message);
     });
   },
 
   clearMessages: function() {
     $("#chats").empty();
+  },
+
+  addMessage: function(message){
+    var arePosts = !!$('.post').length;
+    var $ul = $('#chats');
+    var $li = $('<li class="post"></li>');
+    var $user = $('<p class=user></p>');
+    var $message = $('<p class="message"></p>');
+    var $createdAt = $('<span class="createdAt"></span>');
+    $user.text(message.username);
+    $message.text(message.text);
+    $createdAt.text(message.createdAt);
+    $li.append($user, $message, $createdAt);
+    arePosts ? $ul.prepend($li) : $ul.append($li);
+  },
+
+  addRoom: function(roomName) {
+    var $newRoom = $('<div></div>').addClass('roomName');
+    $('#roomSelect').append($newRoom);
   }
 };
 
