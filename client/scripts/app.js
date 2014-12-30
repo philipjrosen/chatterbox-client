@@ -1,3 +1,6 @@
+window.app = {};
+
+
 var getChats = function(successCallback) {
   var lastPostTime = $('li span').first().text() || '2014-12-01T00:00:00';
   console.log(lastPostTime);
